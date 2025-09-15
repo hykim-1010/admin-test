@@ -1,0 +1,26 @@
+{
+  "list": {
+    "no": ["번호", "No", "NO", "Index", "인덱스"],
+    "lang": ["언어", "Language", "Lang"],
+    "title": ["제목", "Title", "제 목"],
+    "author": ["작성자", "Author", "Writer", "등록자"],
+    "visible": ["노출여부", "노출", "미노출", "표시", "Visible", "Exposure"],
+    "publishedAt": ["발행일시", "발행", "게시일시", "게시일", "Published At", "Publish Date"],
+    "createdAt": ["등록일시", "등록", "생성일시", "생성일", "Created At", "Create Date"],
+    "views": ["조회수", "View Count", "Views", "조회"]
+  },
+  "form": {
+    "lang": ["언어", "Language", "Lang"],
+    "type": ["유형", "타입", "구분", "Type"],
+    "title": ["제목", "Title", "제 목"],
+    "content": ["내용", "에디터", "본문", "Content"],
+    "imagePc": ["이미지", "대표이미지", "썸네일", "이미지(PC)", "Image(PC)"],
+    "imageMobile": ["이미지(Mobile)", "모바일 이미지", "Image(Mobile)"],
+    "linkUrl": ["링크", "링크 URL", "URL", "Link"],
+    "dateRange": ["노출기간", "기간", "발행일시", "게시일시", "Publish Date", "기간(시작/종료)"],
+    "visible": ["노출여부", "노출", "미노출", "Visible", "Exposure"],
+    "attachment": ["첨부", "첨부파일", "파일", "Attachment"]
+  }
+}
+
+

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>하나투어 관리자 페이지 - MAIN 공통 관리 &gt; 메인 팝업 &gt; 목록</title>
+  <style>
+    :root {
+      --gray-50: #f7f7f8;
+      --gray-100: #eef0f3;
+      --gray-200: #e1e4e8;
+      --gray-300: #cfd6dd;
+      --gray-400: #b6bec8;
+      --gray-500: #8e99a8;
+      --text-strong: #1b2430;
+      --text: #2f3a4a;
+      --primary: #2a7de1;
+      --primary-dark: #1d5fb0;
+      --accent: #ff4d57;
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+      color: var(--text);
+      background: #fff;
+      line-height: 1.45;
+      font-size: 15px;
+    }
+
+    .container {
+      padding: 12px 16px 20px;
+      position: relative;
+    }
+
+    /* Top meta strip */
+    .meta {
+      display: grid;
+      grid-template-columns: 240px 64px 1fr 70px 200px 110px 70px 52px 40px;
+      gap: 6px;
+      align-items: stretch;
+      border: 1px solid var(--gray-300);
+      background: var(--gray-50);
+      padding: 6px;
+      border-radius: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .meta-title {
+      background: #fff;
+      border: 1px solid var(--gray-300);
+      padding: 6px 8px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+    .meta-chip {
+      background: #6f7785;
+      color: #fff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      border-radius: 2px;
+    }
+    .meta-value {
+      background: #fff;
+      border: 1px solid var(--gray-300);
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+    }
+    .meta-chip.small { padding: 0 6px; }
+    .meta-value.small { justify-content: center; }
+
+    /* Header and section title */
+    .section-title {
+      margin: 16px 0 12px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    /* Grid layout: main content + aside */
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 16px;
+      align-items: start;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Card */
+    .card {
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #fff;
+      padding: 12px;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .select, .input, .button {
+      height: 32px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #fff;
+      padding: 0 10px;
+      font-size: 14px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .button.primary {
+      background: var(--text-strong);
+      color: #fff;
+      border-color: #191f28;
+      cursor: pointer;
+      font-size: 14px;
+      height: 34px;
+      padding: 0 14px;
+    }
+    .button.primary:hover { background: #11161d; }
+
+    /* Number badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #e53935;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+
+    /* Table */
+    table { width: 100%; max-width: 100%; border-collapse: collapse; box-sizing: border-box; }
+    thead th {
+      text-align: left;
+      font-size: 14px;
+      color: #5b6676;
+      font-weight: 700;
+      border-top: 2px solid var(--gray-400);
+      border-bottom: 1px solid var(--gray-300);
+      padding: 10px 8px;
+      background: #fafbfc;
+    }
+    tbody td {
+      border-bottom: 1px solid var(--gray-200);
+      padding: 10px 8px;
+      font-size: 14px;
+    }
+    tbody tr:hover { background: #fcfdff; }
+    a.link { color: var(--primary); text-decoration: none; }
+    a.link:hover { text-decoration: underline; color: var(--primary-dark); }
+
+    /* Footer actions */
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .btn-register {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      height: 34px;
+    }
+    .btn-register:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+    /* Pagination */
+    .pagination { display: flex; gap: 4px; }
+    .page-btn {
+      min-width: 32px;
+      height: 32px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background: #fff;
+      text-align: center;
+      line-height: 30px;
+      cursor: pointer;
+      padding: 0 8px;
+      font-size: 14px;
+    }
+    .page-btn.active { background: var(--text-strong); color: #fff; border-color: #11161d; }
+
+    /* Aside */
+    .aside .title {
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .desc-list { border-top: 2px solid var(--gray-400); }
+    .desc-item { border-bottom: 1px solid var(--gray-300); padding: 10px 8px; }
+    .desc-item .head { font-weight: 700; margin-bottom: 6px; }
+    .desc-item ul { margin: 0; padding-left: 18px; }
+    .desc-item li { margin: 2px 0; }
+
+    /* Utilities */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    /* Badge overlay for free placement */
+    .badge-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    .badge.draggable {
+      position: absolute;
+      pointer-events: auto;
+      cursor: grab;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      user-select: none;
+    }
+    .badge.draggable:active { cursor: grabbing; }
+  </style>
+  <!-- 이 문서는 화면설계서 전달용 정적 HTML입니다. 동작(검색/페이지 이동)은 데모용입니다. -->
+  <script>
+    (function() {
+      function getBadgeCountFromDescription() {
+        var items = document.querySelectorAll('.desc-list .desc-item .head');
+        return items.length || 0;
+      }
+
+      function loadPositions(count) {
+        try {
+          var raw = localStorage.getItem('badgePositions') || '[]';
+          var arr = JSON.parse(raw);
+          if (!Array.isArray(arr)) arr = [];
+          // Ensure length
+          while (arr.length < count) arr.push({ x: 16 + arr.length * 26, y: 16 });
+          return arr.slice(0, count);
+        } catch(e) {
+          return Array.from({length: count}, function(_, i){ return { x: 16 + i*26, y: 16 }; });
+        }
+      }
+
+      function savePositions(positions) {
+        try { localStorage.setItem('badgePositions', JSON.stringify(positions)); } catch(e) {}
+      }
+
+      function makeDraggable(badge, positions, index) {
+        var startX = 0, startY = 0, originX = 0, originY = 0, moving = false;
+        function onDown(e){
+          moving = true;
+          badge.style.cursor = 'grabbing';
+          startX = (e.touches? e.touches[0].clientX : e.clientX);
+          startY = (e.touches? e.touches[0].clientY : e.clientY);
+          originX = parseFloat(badge.style.left)||0;
+          originY = parseFloat(badge.style.top)||0;
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('mouseup', onUp);
+          document.addEventListener('touchmove', onMove, {passive:false});
+          document.addEventListener('touchend', onUp);
+        }
+        function onMove(e){
+          if (!moving) return;
+          if (e.touches) e.preventDefault();
+          var cx = (e.touches? e.touches[0].clientX : e.clientX);
+          var cy = (e.touches? e.touches[0].clientY : e.clientY);
+          var nx = originX + (cx - startX);
+          var ny = originY + (cy - startY);
+          // Keep inside viewport
+          var maxX = window.innerWidth - badge.offsetWidth - 2;
+          var maxY = window.innerHeight - badge.offsetHeight - 2;
+          nx = Math.max(2, Math.min(maxX, nx));
+          ny = Math.max(2, Math.min(maxY, ny));
+          badge.style.left = nx + 'px';
+          badge.style.top = ny + 'px';
+        }
+        function onUp(){
+          if (!moving) return;
+          moving = false;
+          badge.style.cursor = 'grab';
+          positions[index] = { x: parseFloat(badge.style.left)||0, y: parseFloat(badge.style.top)||0 };
+          savePositions(positions);
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          document.removeEventListener('touchmove', onMove);
+          document.removeEventListener('touchend', onUp);
+        }
+        badge.addEventListener('mousedown', onDown);
+        badge.addEventListener('touchstart', onDown, {passive:true});
+      }
+
+      function renderBadges() {
+        var count = getBadgeCountFromDescription();
+        var positions = loadPositions(count);
+        var layer = document.querySelector('.badge-layer');
+        if (!layer) {
+          layer = document.createElement('div');
+          layer.className = 'badge-layer';
+          document.body.appendChild(layer);
+        }
+        layer.innerHTML = '';
+        for (var i=0;i<count;i++){
+          var badge = document.createElement('div');
+          badge.className = 'badge draggable';
+          badge.textContent = (i+1);
+          badge.style.left = (positions[i].x||16) + 'px';
+          badge.style.top  = (positions[i].y||16) + 'px';
+          layer.appendChild(badge);
+          makeDraggable(badge, positions, i);
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', function(){
+        // Path 텍스트를 섹션 타이틀과 동기화
+        try {
+          var titleText = document.getElementById('section-title')?.textContent || '';
+          var metaPath = document.getElementById('meta-path');
+          if (metaPath) metaPath.textContent = titleText;
+        } catch(e) {}
+        renderBadges();
+      });
+      window.addEventListener('resize', function(){ /* keep badges within viewport on resize */
+        var layer = document.querySelector('.badge-layer');
+        if (!layer) return;
+        Array.prototype.forEach.call(layer.children, function(badge){
+          var maxX = window.innerWidth - badge.offsetWidth - 2;
+          var maxY = window.innerHeight - badge.offsetHeight - 2;
+          var nx = Math.min(maxX, parseFloat(badge.style.left)||0);
+          var ny = Math.min(maxY, parseFloat(badge.style.top)||0);
+          badge.style.left = Math.max(2, nx) + 'px';
+          badge.style.top  = Math.max(2, ny) + 'px';
+        });
+      });
+    })();
+  </script>
+  <style>
+    /* 배지 위치 연결용 (문서상 번호 배치) */
+    [data-num] { position: relative; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Meta Strip -->
+    <div class="meta card">
+      <div class="meta-title">하나투어 관리자 페이지</div>
+      <div class="meta-chip">Path</div>
+      <div class="meta-value" id="meta-path"></div>
+      <div class="meta-chip">Writer</div>
+      <div class="meta-value">The Uber Creative</div>
+      <div class="meta-chip">Date / Version</div>
+      <div class="meta-value small">2024</div>
+      <div class="meta-chip small">page</div>
+      <div class="meta-value small">5</div>
+    </div>
+
+    <div class="section-title" id="section-title">MAIN 공통 관리 &gt; 메인 팝업 &gt; 목록</div>
+
+    <div class="layout">
+      <!-- Main -->
+      <div class="card">
+        <!-- Filters -->
+        <div class="filters">
+          <label for="lang" class="sr-only">언어</label>
+          <select id="lang" class="select" aria-label="언어">
+            <option>언어</option>
+            <option>KR</option>
+            <option>EN</option>
+            <option>CN</option>
+            <option>JP</option>
+          </select>
+
+          <label for="cond" class="sr-only">검색 조건</label>
+          <select id="cond" class="select" aria-label="검색 조건">
+            <option>전체</option>
+            <option>제목</option>
+          </select>
+
+          <label for="keyword" class="sr-only">검색어</label>
+          <input id="keyword" class="input" type="text" placeholder="검색" />
+          <button class="button primary" type="button">검색</button>
+        </div>
+
+        <!-- Table -->
+        <div data-num="3">
+          <table role="table" aria-label="메인 팝업 목록">
+            <thead>
+              <tr>
+                <th scope="col" style="width:60px">번호</th>
+                <th scope="col" style="width:80px">언어</th>
+                <th scope="col" style="width:120px">구분</th>
+                <th scope="col">제목</th>
+                <th scope="col" style="width:120px">작성자</th>
+                <th scope="col" style="width:80px">노출여부</th>
+                <th scope="col" style="width:260px">노출기간</th>
+                <th scope="col" style="width:160px">등록일시</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dummy rows (이미지 참고용) -->
+              <tr>
+                <td>55</td>
+                <td>KR</td>
+                <td>PC</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>Y</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>54</td>
+                <td>EN</td>
+                <td>MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>Y</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>53</td>
+                <td>CN</td>
+                <td>PC, MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>52</td>
+                <td>JP</td>
+                <td>PC, MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>51</td>
+                <td>JP</td>
+                <td>PC</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>50</td>
+                <td>KR</td>
+                <td>MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>49</td>
+                <td>KR</td>
+                <td>PC, MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>48</td>
+                <td>KR</td>
+                <td>PC, MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>47</td>
+                <td>KR</td>
+                <td>PC</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>46</td>
+                <td>KR</td>
+                <td>MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>45</td>
+                <td>KR</td>
+                <td>PC</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>44</td>
+                <td>KR</td>
+                <td>PC, MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>43</td>
+                <td>EN</td>
+                <td>MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>42</td>
+                <td>JP</td>
+                <td>PC</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+              <tr>
+                <td>41</td>
+                <td>CN</td>
+                <td>PC, MOBILE</td>
+                <td><a class="link" href="#">2024 주주총회 개최</a></td>
+                <td>김*나</td>
+                <td>N</td>
+                <td>2024-12-01 00:00 ~ 2024-12-30 00:00</td>
+                <td>2024-11-30 17:30</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Footer actions: Register + Pagination -->
+        <div class="actions">
+          <div data-num="4">
+            <button class="btn-register" type="button">등록</button>
+          </div>
+          <nav class="pagination" aria-label="페이지네이션">
+            <button class="page-btn" aria-label="처음">&laquo;&laquo;</button>
+            <button class="page-btn" aria-label="이전">&laquo;</button>
+            <button class="page-btn active" aria-current="page">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn">6</button>
+            <button class="page-btn">7</button>
+            <button class="page-btn">8</button>
+            <button class="page-btn">9</button>
+            <button class="page-btn">10</button>
+            <button class="page-btn" aria-label="다음">&raquo;</button>
+            <button class="page-btn" aria-label="마지막">&raquo;&raquo;</button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Aside -->
+      <aside class="aside card" aria-label="Description">
+        <div class="title">Description</div>
+        <div class="desc-list">
+          <div class="desc-item">
+            <div class="head">1. 언어</div>
+            <ul>
+              <li>KR, EN, CN, JP</li>
+            </ul>
+          </div>
+          <div class="desc-item">
+            <div class="head">2. 검색 조건</div>
+            <ul>
+              <li>전체, 제목</li>
+            </ul>
+          </div>
+          <div class="desc-item">
+            <div class="head">3. 제목</div>
+            <ul>
+              <li>클릭 시 팝업 수정 화면으로 이동</li>
+            </ul>
+          </div>
+          <div class="desc-item">
+            <div class="head">4. 등록</div>
+            <ul>
+              <li>버튼 클릭 시 팝업 등록 화면으로 이동</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
+
+

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media관리 &gt; News &gt; 등록</title>
+  <style>
+    :root { --gray-50:#f7f7f8; --gray-100:#eef0f3; --gray-200:#e1e4e8; --gray-300:#cfd6dd; --gray-400:#b6bec8; --text-strong:#1b2430; --text:#2a3a4a; --primary:#2a7de1; --primary-dark:#1d5fb0; --danger:#e53935 }
+    html, body { height:100% }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif; color:var(--text); line-height:1.45; font-size:15px }
+    .container { padding:12px 16px 20px; position:relative }
+    .meta { display:grid; grid-template-columns:240px 64px 1fr 70px 200px 110px 70px 52px 40px; gap:6px; align-items:stretch; border:1px solid var(--gray-300); background:var(--gray-50); padding:6px; border-radius:6px; width:100%; box-sizing:border-box }
+    .meta-title { background:#fff; border:1px solid var(--gray-300); padding:6px 8px; font-weight:700; display:flex; align-items:center }
+    .meta-chip { background:#6f7785; color:#fff; font-weight:700; display:flex; align-items:center; justify-content:center; padding:0 10px; border-radius:2px }
+    .meta-value { background:#fff; border:1px solid var(--gray-300); padding:6px 8px; display:flex; align-items:center }
+    .meta-chip.small { padding:0 6px } .meta-value.small { justify-content:center }
+    .section-title { display:flex; align-items:center; justify-content:space-between; margin:16px 0 12px; font-size:20px; font-weight:800 }
+    .nav { display:flex; gap:6px }
+    .layout { display:grid; grid-template-columns: 1fr 300px; gap:16px; align-items:start; width:100%; box-sizing:border-box }
+    .card { border:1px solid var(--gray-300); border-radius:6px; background:#fff; padding:12px; width:100%; max-width:100%; overflow:hidden; box-sizing:border-box }
+    .form { display:grid; gap:12px }
+    .row { display:grid; grid-template-columns:160px 1fr; gap:12px; align-items:center; border-bottom:1px solid var(--gray-200); padding-bottom:10px }
+    .row:last-of-type { border-bottom:0 }
+    .label { font-weight:700; color:#3a4556 }
+    .req { color:var(--danger); font-weight:900 }
+    .input, .select { height:32px; border:1px solid var(--gray-300); border-radius:6px; padding:0 10px; font-size:14px; min-width:575px; max-width:100%; box-sizing:border-box }
+    .textarea { height:120px; padding:10px; border:1px solid var(--gray-300); border-radius:6px; resize:vertical; min-width:575px; max-width:100%; box-sizing:border-box }
+    .actions { display:flex; justify-content:flex-end; gap:10px; margin-top:14px }
+    .button { height:32px; border:1px solid var(--gray-300); border-radius:6px; background:#fff; padding:0 12px; cursor:pointer; font-size:14px }
+    .button.primary { background:var(--text-strong); color:#fff; border-color:#191f28 }
+    .aside .title { font-weight:800; margin-bottom:8px }
+    .desc-list { border-top:2px solid var(--gray-400) }
+    .desc-item { border-bottom:1px solid var(--gray-300); padding:10px 8px }
+    .desc-item .head { font-weight:700; margin-bottom:6px }
+    .filebox { display:grid; grid-template-columns:1fr auto auto; gap:8px; align-items:center; width:575px; max-width:575px; box-sizing:border-box }
+    .textbox { height:32px; border:1px solid var(--gray-300); border-radius:6px; padding:0 10px; background:#fafbfc; color:#8e99a8; font-size:14px; display:flex; align-items:center }
+    .hint { font-size:12px; color:var(--gray-400); margin-top:4px; line-height:1.4 }
+    
+    /* Page List Popup */
+    .page-list-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 10000; }
+    .page-list-popup.show { display: flex; }
+    .page-list-content { background: #fff; border-radius: 8px; padding: 20px; max-width: 400px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .page-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .page-list-title { font-size: 18px; font-weight: 700; color: var(--text-strong); }
+    .page-list-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray-400); padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+    .page-list-close:hover { color: var(--text-strong); }
+    .page-list-items { display: grid; gap: 8px; }
+    .page-list-item { padding: 12px 16px; border: 1px solid var(--gray-300); border-radius: 6px; cursor: pointer; transition: all 0.2s; background: #fff; }
+    .page-list-item:hover { background: var(--gray-50); border-color: var(--primary); }
+    .page-list-item.current { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .page-list-item-name { font-weight: 600; margin-bottom: 4px; }
+    .page-list-item-desc { font-size: 12px; color: var(--gray-400); }
+    .page-list-item.current .page-list-item-desc { color: rgba(255,255,255,0.8); }
+  </style>
+  <script>
+    (function(){
+      // 페이지 목록 데이터
+      var pageList = [
+        { name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
+        { name: 'Media관리 > News > 등록', file: 'Media관리_News_등록.html', desc: '뉴스 게시글 등록' },
+        { name: 'Media관리 > News > 수정/상세', file: 'Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정/상세' },
+        { name: 'Media관리 > Social > 목록', file: 'Media관리_Social_목록.html', desc: '소셜 포스트 목록 관리' },
+        { name: 'Media관리 > Social > 등록', file: 'Media관리_Social_등록.html', desc: '소셜 포스트 등록' },
+        { name: 'Media관리 > Social > 수정/상세', file: 'Media관리_Social_수정_상세.html', desc: '소셜 포스트 수정/상세' }
+      ];
+      
+      function getCurrentPage() {
+        var path = window.location.pathname;
+        var filename = path.split('/').pop();
+        return filename || 'Media관리_News_등록.html';
+      }
+      
+      function renderPageList() {
+        var pageListItems = document.getElementById('page-list-items');
+        var currentPage = getCurrentPage();
+        pageListItems.innerHTML = '';
+        
+        pageList.forEach(function(page) {
+          var item = document.createElement('div');
+          item.className = 'page-list-item';
+          if (page.file === currentPage) {
+            item.classList.add('current');
+          }
+          
+          item.innerHTML = '<div class="page-list-item-name">' + page.name + '</div><div class="page-list-item-desc">' + page.desc + '</div>';
+          
+          item.addEventListener('click', function() {
+            if (page.file !== currentPage) {
+              window.location.href = page.file;
+            }
+          });
+          
+          pageListItems.appendChild(item);
+        });
+      }
+      
+      function showPageList() {
+        var pageListPopup = document.getElementById('page-list-popup');
+        renderPageList();
+        pageListPopup.classList.add('show');
+      }
+      
+      function hidePageList() {
+        var pageListPopup = document.getElementById('page-list-popup');
+        pageListPopup.classList.remove('show');
+      }
+      
+      window.addEventListener('DOMContentLoaded', function(){ 
+        // Page List 이벤트 리스너
+        var pageListBtn = document.getElementById('page-list-btn');
+        var pageListClose = document.getElementById('page-list-close');
+        var pageListPopup = document.getElementById('page-list-popup');
+        
+        if (pageListBtn) {
+          pageListBtn.addEventListener('click', showPageList);
+        }
+        
+        if (pageListClose) {
+          pageListClose.addEventListener('click', hidePageList);
+        }
+        
+        if (pageListPopup) {
+          pageListPopup.addEventListener('click', function(e) {
+            if (e.target === pageListPopup) {
+              hidePageList();
+            }
+          });
+        }
+      });
+    })();
+  </script>
+</head>
+<body>
+  <div class="container" id="tpl-container">
+    <div class="meta card" id="meta-card-post">
+      <div class="meta-title" id="meta-title-post">테스트 관리자 페이지</div>
+      <div class="meta-chip">Path</div>
+      <div class="meta-value" id="meta-path-post">Media관리 &gt; News &gt; 등록</div>
+      <div class="meta-chip">Writer</div>
+      <div class="meta-value" id="meta-writer-post">김희영</div>
+      <div class="meta-chip">Date / Version</div>
+      <div class="meta-value small" id="meta-date-post">v1.0</div>
+      <div class="meta-chip small">page</div>
+      <div class="meta-value small" id="meta-page-post">2</div>
+    </div>
+    <div class="section-title" id="section-title-post"><div>Media관리 &gt; News &gt; 등록</div><div class="nav"><a class="button" href="Media관리_News_목록.html">이전</a><a class="button" href="Media관리_News_수정_상세.html">다음</a><button class="button" id="page-list-btn" type="button">페이지 목록</button></div></div>
+    <div class="layout" id="layout-post">
+      <div class="card" id="post-card">
+        <div class="form" id="post-form">
+          <div class="row" id="post-row-title"><div class="label" id="post-label-title">제목 <span class="req">*</span></div><div><input class="input" id="post-title" placeholder="제목을 입력해주세요." /></div></div>
+          <div class="row" id="post-row-content"><div class="label" id="post-label-content">내용(에디터)</div><div><textarea class="textarea" id="post-content" placeholder="내용을 입력해주세요."></textarea></div></div>
+          <div class="row" id="post-row-image"><div class="label" id="post-label-image">이미지 <span class="req">*</span></div><div class="control" id="post-image"><div class="filebox"><div class="textbox">선택된 파일이 없습니다.</div><button class="button" type="button">파일 선택</button><button class="button" type="button">삭제</button></div><div class="hint" id="post-image-hint">※ 권장 사이즈: 가로 ###px * 세로 ###px<br>파일 형식: JPG, JPEG, PNG / 용량: 30MB 이하</div></div></div>
+          <div class="row" id="post-row-attachment"><div class="label" id="post-label-attachment">첨부파일</div><div class="control" id="post-attachment"><div class="filebox"><div class="textbox">선택된 파일이 없습니다.</div><button class="button" type="button">파일 선택</button><button class="button" type="button">삭제</button></div><div class="hint" id="post-attachment-hint">※ 파일 형식: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX / 용량: 50MB 이하</div></div></div>
+          <div class="row" id="post-row-published"><div class="label" id="post-label-published">발행일시</div><div><input class="input" id="post-publishedAt" type="datetime-local" /></div></div>
+          <div class="row" id="post-row-visible"><div class="label" id="post-label-visible">노출여부 <span class="req">*</span></div><div><label><input type="radio" name="v" checked /> Y</label> <label><input type="radio" name="v" /> N</label></div></div>
+          <div class="actions" id="post-actions"><button class="button" id="post-btn-list" type="button">목록</button><button class="button primary" id="post-btn-submit" type="button">등록</button></div>
+        </div>
+      </div>
+      <aside class="aside card" id="desc-aside-post" aria-label="Description">
+        <div class="title" id="desc-title-post">Description</div>
+        <div class="desc-list" id="desc-list-post">
+          <div class="desc-item"><div class="head">콘텐츠</div><ul>
+            <li>제목, 내용(에디터), 이미지, 첨부파일, 발행일시, 노출여부(Y/N)</li>
+          </ul></div>
+          <div class="desc-item"><div class="head">버튼</div><ul>
+            <li>등록하기, 목록으로</li>
+          </ul></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Page List Popup -->
+  <div class="page-list-popup" id="page-list-popup">
+    <div class="page-list-content">
+      <div class="page-list-header">
+        <div class="page-list-title">페이지 목록</div>
+        <button class="page-list-close" id="page-list-close">&times;</button>
+      </div>
+      <div class="page-list-items" id="page-list-items">
+        <!-- 페이지 목록이 동적으로 생성됩니다 -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+
+
