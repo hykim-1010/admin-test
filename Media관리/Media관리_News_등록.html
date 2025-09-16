@@ -53,81 +53,76 @@
     .page-list-item.current .page-list-item-desc { color: rgba(255,255,255,0.8); }
   </style>
   <script>
-    (function(){
-      // 페이지 목록 데이터
-      var pageList = [
-        { name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
-        { name: 'Media관리 > News > 등록', file: 'Media관리_News_등록.html', desc: '뉴스 게시글 등록' },
-        { name: 'Media관리 > News > 수정/상세', file: 'Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정/상세' },
-        { name: 'Media관리 > Social > 목록', file: 'Media관리_Social_목록.html', desc: '소셜 포스트 목록 관리' },
-        { name: 'Media관리 > Social > 등록', file: 'Media관리_Social_등록.html', desc: '소셜 포스트 등록' },
-        { name: 'Media관리 > Social > 수정/상세', file: 'Media관리_Social_수정_상세.html', desc: '소셜 포스트 수정/상세' }
-      ];
+    // 페이지 목록 데이터
+    var pageListData = [
+      { name: '로그인 1차', file: '../로그인_1차.html', desc: '아이디/비밀번호 로그인' },
+      { name: '로그인 2차', file: '../로그인_2차.html', desc: '이메일 인증' },
+      { name: '로그인 3차', file: '../로그인_3차.html', desc: '인증번호 입력' },
+      { name: '초기 비밀번호 설정', file: '../초기비밀번호설정.html', desc: '관리자 초기 비밀번호 변경' },
+      { name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
+      { name: 'Media관리 > News > 등록', file: 'Media관리_News_등록.html', desc: '뉴스 게시글 등록' },
+      { name: 'Media관리 > News > 수정/상세', file: 'Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정 및 상세 정보 조회' },
+      { name: 'Media관리 > Social > 목록', file: 'Media관리_Social_목록.html', desc: '소셜 포스트 목록 관리' },
+      { name: 'Media관리 > Social > 등록', file: 'Media관리_Social_등록.html', desc: '소셜 포스트 등록' },
+      { name: 'Media관리 > Social > 수정/상세', file: 'Media관리_Social_수정_상세.html', desc: '소셜 포스트 수정 및 상세 정보 조회' }
+    ];
+
+    var currentPage = 'Media관리_News_등록.html';
+
+    function showPageList() {
+      var pageListItems = document.getElementById('page-list-items');
+      var pageListPopup = document.getElementById('page-list-popup');
       
-      function getCurrentPage() {
-        var path = window.location.pathname;
-        var filename = path.split('/').pop();
-        return filename || 'Media관리_News_등록.html';
+      pageListItems.innerHTML = '';
+      
+      pageListData.forEach(function(page) {
+        var item = document.createElement('div');
+        item.className = 'page-list-item';
+        if (page.file === currentPage) {
+          item.classList.add('current');
+        }
+        
+        item.innerHTML = '<div class="page-list-item-name">' + page.name + '</div><div class="page-list-item-desc">' + page.desc + '</div>';
+        
+        item.addEventListener('click', function() {
+          if (page.file !== currentPage) {
+            window.location.href = page.file;
+          }
+        });
+        
+        pageListItems.appendChild(item);
+      });
+      
+      pageListPopup.classList.add('show');
+    }
+
+    function hidePageList() {
+      var pageListPopup = document.getElementById('page-list-popup');
+      pageListPopup.classList.remove('show');
+    }
+
+    // 이벤트 리스너 등록
+    document.addEventListener('DOMContentLoaded', function() {
+      var pageListBtn = document.getElementById('page-list-btn');
+      var pageListClose = document.getElementById('page-list-close');
+      var pageListPopup = document.getElementById('page-list-popup');
+      
+      if (pageListBtn) {
+        pageListBtn.addEventListener('click', showPageList);
       }
       
-      function renderPageList() {
-        var pageListItems = document.getElementById('page-list-items');
-        var currentPage = getCurrentPage();
-        pageListItems.innerHTML = '';
-        
-        pageList.forEach(function(page) {
-          var item = document.createElement('div');
-          item.className = 'page-list-item';
-          if (page.file === currentPage) {
-            item.classList.add('current');
+      if (pageListClose) {
+        pageListClose.addEventListener('click', hidePageList);
+      }
+      
+      if (pageListPopup) {
+        pageListPopup.addEventListener('click', function(e) {
+          if (e.target === pageListPopup) {
+            hidePageList();
           }
-          
-          item.innerHTML = '<div class="page-list-item-name">' + page.name + '</div><div class="page-list-item-desc">' + page.desc + '</div>';
-          
-          item.addEventListener('click', function() {
-            if (page.file !== currentPage) {
-              window.location.href = page.file;
-            }
-          });
-          
-          pageListItems.appendChild(item);
         });
       }
-      
-      function showPageList() {
-        var pageListPopup = document.getElementById('page-list-popup');
-        renderPageList();
-        pageListPopup.classList.add('show');
-      }
-      
-      function hidePageList() {
-        var pageListPopup = document.getElementById('page-list-popup');
-        pageListPopup.classList.remove('show');
-      }
-      
-      document.addEventListener('DOMContentLoaded', function(){ 
-        // Page List 이벤트 리스너
-        var pageListBtn = document.getElementById('page-list-btn');
-        var pageListClose = document.getElementById('page-list-close');
-        var pageListPopup = document.getElementById('page-list-popup');
-        
-        if (pageListBtn) {
-          pageListBtn.addEventListener('click', showPageList);
-        }
-        
-        if (pageListClose) {
-          pageListClose.addEventListener('click', hidePageList);
-        }
-        
-        if (pageListPopup) {
-          pageListPopup.addEventListener('click', function(e) {
-            if (e.target === pageListPopup) {
-              hidePageList();
-            }
-          });
-        }
-      });
-    })();
+    });
   </script>
 </head>
 <body>
