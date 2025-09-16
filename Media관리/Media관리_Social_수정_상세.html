@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Media관리 &gt; News &gt; 수정/상세</title>
+  <title>Media관리 &gt; Social &gt; 수정/상세</title>
   <style>
     :root { --gray-50:#f7f7f8; --gray-100:#eef0f3; --gray-200:#e1e4e8; --gray-300:#cfd6dd; --gray-400:#b6bec8; --text-strong:#1b2430; --text:#2a3a4a; --primary:#2a7de1; --primary-dark:#1d5fb0; --danger:#e53935 }
     html, body { height:100% }
@@ -59,7 +59,7 @@
     (function(){
       // 페이지 목록 데이터
       var pageList = [
-        { name: '메인 메뉴', file: 'index.html', desc: 'Media관리 시스템 메인 메뉴' },
+        { name: '메인 메뉴', file: '../index.html', desc: 'Media관리 시스템 메인 메뉴' },
         { name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
         { name: 'Media관리 > News > 등록', file: 'Media관리_News_등록.html', desc: '뉴스 게시글 등록' },
         { name: 'Media관리 > News > 수정/상세', file: 'Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정/상세' },
@@ -71,7 +71,7 @@
       function getCurrentPage() {
         var path = window.location.pathname;
         var filename = path.split('/').pop();
-        return filename || 'Media관리_News_수정_상세.html';
+        return filename || 'Media관리_Social_수정_상세.html';
       }
       
       function renderPageList() {
@@ -139,22 +139,21 @@
     <div class="meta card" id="meta-card-post">
       <div class="meta-title" id="meta-title-post">테스트 관리자 페이지</div>
       <div class="meta-chip">Path</div>
-      <div class="meta-value" id="meta-path-post">Media관리 &gt; News &gt; 수정/상세</div>
+      <div class="meta-value" id="meta-path-post">Media관리 &gt; Social &gt; 수정/상세</div>
       <div class="meta-chip">Writer</div>
       <div class="meta-value" id="meta-writer-post">김희영</div>
       <div class="meta-chip">Date / Version</div>
       <div class="meta-value small" id="meta-date-post">v1.0</div>
       <div class="meta-chip small">page</div>
-      <div class="meta-value small" id="meta-page-post">3</div>
+      <div class="meta-value small" id="meta-page-post">6</div>
     </div>
-    <div class="section-title" id="section-title-post"><div>Media관리 &gt; News &gt; 수정/상세</div><div class="nav"><a class="button" href="Media관리_News_등록.html">이전</a><a class="button" href="Media관리_Social_목록.html">다음</a><button class="button" id="page-list-btn" type="button">페이지 목록</button></div></div>
+    <div class="section-title" id="section-title-post"><div>Media관리 &gt; Social &gt; 수정/상세</div><div class="nav"><a class="button" href="Media관리_Social_등록.html">이전</a><a class="button" href="#" aria-disabled="true">다음</a><button class="button" id="page-list-btn" type="button">페이지 목록</button></div></div>
     <div class="layout" id="layout-post">
       <div class="card" id="post-card">
         <div class="form" id="post-form">
-          <div class="row" id="post-row-title"><div class="label" id="post-label-title">제목 <span class="req">*</span></div><div><input class="input" id="post-title" value="샘플 뉴스 제목" /></div></div>
-          <div class="row" id="post-row-content"><div class="label" id="post-label-content">내용(에디터)</div><div><textarea class="textarea" id="post-content">샘플 내용</textarea></div></div>
+          <div class="row" id="post-row-title"><div class="label" id="post-label-title">제목 <span class="req">*</span></div><div><input class="input" id="post-title" value="샘플 소셜 포스트" /></div></div>
+          <div class="row" id="post-row-link"><div class="label" id="post-label-link">링크 URL</div><div style="display:flex; flex-direction:column; gap:8px; align-items:stretch;"><div class="radio-group" id="post-link-target"><label><input type="radio" name="target" value="_self" checked> 본창</label><label><input type="radio" name="target" value="_blank"> 새창</label></div><input type="text" class="input w-575" id="post-link" value="https://" aria-label="링크 URL" /></div></div>
           <div class="row" id="post-row-image"><div class="label" id="post-label-image">이미지 <span class="req">*</span></div><div class="control" id="post-image"><div class="filebox"><div class="textbox">선택된 파일이 없습니다.</div><button class="button" type="button">파일 선택</button><button class="button" type="button">삭제</button></div><div class="hint" id="post-image-hint">※ 권장 사이즈: 가로 ###px * 세로 ###px<br>파일 형식: JPG, JPEG, PNG / 용량: 30MB 이하</div></div></div>
-          <div class="row" id="post-row-attachment"><div class="label" id="post-label-attachment">첨부파일</div><div class="control" id="post-attachment"><div class="filebox"><div class="textbox">선택된 파일이 없습니다.</div><button class="button" type="button">파일 선택</button><button class="button" type="button">삭제</button></div><div class="hint" id="post-attachment-hint">※ 파일 형식: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX / 용량: 50MB 이하</div></div></div>
           <div class="row" id="post-row-visible"><div class="label" id="post-label-visible">노출여부 <span class="req">*</span></div><div><label><input type="radio" name="v" checked /> Y</label> <label><input type="radio" name="v" /> N</label></div></div>
           <div class="row" id="post-row-published"><div class="label" id="post-label-published">발행일시</div><div><input class="input" id="post-publishedAt" type="datetime-local" /></div></div>
           <div class="row" id="post-row-registration">
@@ -177,14 +176,14 @@
               <div class="info-value" id="post-updatedAt">2024-06-19 18:30</div>
             </div>
           </div>
-          <div class="actions"><button class="button primary" type="button">수정하기</button><button class="button" type="button">삭제하기</button><button class="button" type="button">목록으로</button></div>
+          <div class="actions" id="post-actions"><button class="button primary" type="button">수정하기</button><button class="button" type="button">삭제하기</button><button class="button" type="button">목록으로</button></div>
         </div>
       </div>
       <aside class="aside card" id="desc-aside-post" aria-label="Description">
         <div class="title" id="desc-title-post">Description</div>
         <div class="desc-list" id="desc-list-post">
           <div class="desc-item"><div class="head">콘텐츠</div><ul>
-            <li>제목, 내용(에디터), 이미지, 첨부파일, 노출여부(Y/N), 발행일시</li>
+            <li>제목, 링크(URL), 이미지, 노출여부(Y/N), 발행일시</li>
             <li>등록자/등록일시, 수정자/수정일시</li>
           </ul></div>
           <div class="desc-item"><div class="head">버튼</div><ul>
