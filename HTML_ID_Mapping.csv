@@ -1,0 +1,35 @@
+﻿element_id,mapped_text,description,category
+meta-title,관리자 페이지 제목,페이지 상단 제목,meta
+meta-path,Path,경로 표시,meta
+meta-writer,Writer,작성자,meta
+meta-date,Date / Version,날짜/버전,meta
+meta-page,page,페이지 번호,meta
+section-title-list,섹션 > 하위섹션 > 목록,목록 페이지 제목,section
+section-title-post,섹션 > 하위섹션 > 등록,등록 페이지 제목,section
+section-title-detail,섹션 > 하위섹션 > 수정/상세,수정/상세 페이지 제목,section
+filter-start-date,시작일,검색 시작 날짜,filter
+filter-end-date,종료일,검색 종료 날짜,filter
+filter-cond,검색 조건,검색 조건 선택,filter
+filter-keyword,검색,검색 키워드 입력,filter
+filter-submit,검색,검색 실행 버튼,filter
+list-thead,테이블 헤더,목록 테이블 헤더,table
+list-tbody,테이블 본문,목록 테이블 본문,table
+post-label-lang,언어,언어 선택 라벨,form
+post-label-type,유형,유형 선택 라벨,form
+post-label-title,제목,제목 입력 라벨,form
+post-label-image,이미지,이미지 업로드 라벨,form
+post-label-attachment,첨부파일,첨부파일 업로드 라벨,form
+post-label-link,링크 URL,링크 URL 입력 라벨,form
+post-label-daterange,노출기간,노출기간 설정 라벨,form
+post-label-visible,노출여부,노출여부 설정 라벨,form
+btn-register,등록,등록 버튼,button
+post-btn-submit,등록,등록 제출 버튼,button
+post-btn-list,목록,목록으로 이동 버튼,button
+detail-btn-modify,수정하기,수정 버튼,button
+detail-btn-delete,삭제하기,삭제 버튼,button
+detail-btn-list,목록으로,목록으로 이동 버튼,button
+detail-registrant,등록자,등록자 정보,detail
+detail-register-date,등록일시,등록일시 정보,detail
+detail-modifier,수정자,수정자 정보,detail
+detail-modify-date,수정일시,수정일시 정보,detail
+desc-title,Description,설명 섹션 제목,description

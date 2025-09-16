@@ -88,6 +88,7 @@
       function renderBadges(){ var c=getBadgeCount(), p=loadPositions(c), layer=q('.badge-layer')||document.body.appendChild(Object.assign(document.createElement('div'),{className:'badge-layer'})); layer.innerHTML=''; for(var i=0;i<c;i++){ var b=document.createElement('div'); b.className='badge draggable'; b.textContent=(i+1); b.style.left=(p[i].x||16)+'px'; b.style.top=(p[i].y||16)+'px'; layer.appendChild(b); makeDraggable(b,p,i);} }
       // 페이지 목록 데이터
       var pageList = [
+        { name: '메인 메뉴', file: 'index.html', desc: 'Media관리 시스템 메인 메뉴' },
         { name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
         { name: 'Media관리 > News > 등록', file: 'Media관리_News_등록.html', desc: '뉴스 게시글 등록' },
         { name: 'Media관리 > News > 수정/상세', file: 'Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정/상세' },
