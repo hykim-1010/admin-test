@@ -11,10 +11,10 @@
     .container { padding: 12px 16px 20px; position: relative; }
 
     /* Meta */
-    .meta { display: grid; grid-template-columns: 240px 64px 1fr 70px 200px 110px 70px 52px 40px; gap: 6px; align-items: stretch; border: 1px solid var(--gray-300); background: var(--gray-50); padding: 6px; border-radius: 6px; width: 100%; box-sizing: border-box; }
-    .meta-title { background: #fff; border: 1px solid var(--gray-300); padding: 6px 8px; font-weight: 700; display: flex; align-items: center; }
+    .meta { display: grid; grid-template-columns: 240px 64px 1fr 70px 200px 110px 70px 52px 40px; gap: 6px; align-items: stretch; border: 1px solid #cfd6dd; background: #f7f7f8; padding: 6px; border-radius: 6px; width: 100%; box-sizing: border-box; }
+    .meta-title { background: #fff; border: 1px solid #cfd6dd; padding: 6px 8px; font-weight: 700; display: flex; align-items: center; }
     .meta-chip { background: #6f7785; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 10px; border-radius: 2px; }
-    .meta-value { background: #fff; border: 1px solid var(--gray-300); padding: 6px 8px; display: flex; align-items: center; }
+    .meta-value { background: #fff; border: 1px solid #cfd6dd; padding: 6px 8px; display: flex; align-items: center; }
     .meta-chip.small { padding: 0 6px; } .meta-value.small { justify-content: center; }
 
     .section-title { display:flex; align-items:center; justify-content:space-between; margin: 16px 0 12px; font-size: 20px; font-weight: 800; }
@@ -22,11 +22,11 @@
     .nav .button { height:32px; border:1px solid var(--gray-300); border-radius:6px; background:#fff; padding:0 10px; cursor:pointer; font-size:14px; }
 
     .layout { display: grid; grid-template-columns: 1fr 300px; gap: 16px; align-items: start; width: 100%; box-sizing: border-box; }
-    .card { border: 1px solid var(--gray-300); border-radius: 6px; background: #fff; padding: 12px; width: 100%; max-width: 100%; overflow: hidden; box-sizing: border-box; }
+    .card { border: 1px solid #cfd6dd; border-radius: 6px; background: #fff; padding: 12px; width: 100%; max-width: 100%; overflow: hidden; box-sizing: border-box; }
 
     /* Filters */
     .filters { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-    .select, .input, .button { height: 32px; border: 1px solid var(--gray-300); border-radius: 6px; background: #fff; padding: 0 10px; font-size: 14px; max-width: 100%; box-sizing: border-box; }
+    .select, .input, .button { height: 32px; border: 1px solid #cfd6dd; border-radius: 6px; background: #fff; padding: 0 10px; font-size: 14px; max-width: 100%; box-sizing: border-box; }
     .button.primary { background: var(--text-strong); color: #fff; border-color: #191f28; cursor: pointer; font-size: 14px; height: 34px; padding: 0 14px; }
 
     /* Date filter */
@@ -42,10 +42,10 @@
 
     /* Actions */
     .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
-    .btn-register { background: var(--primary); border: 1px solid var(--primary); color: #fff; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; height: 34px; }
+    .btn-register { background: #2a7de1; border: 1px solid var(--primary); color: #fff; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; height: 34px; }
     .btn-register:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
     .pagination { display: flex; gap: 4px; }
-    .page-btn { min-width: 32px; height: 32px; border: 1px solid var(--gray-300); border-radius: 6px; background: #fff; text-align: center; line-height: 30px; cursor: pointer; padding: 0 8px; font-size: 14px; }
+    .page-btn { min-width: 32px; height: 32px; border: 1px solid #cfd6dd; border-radius: 6px; background: #fff; text-align: center; line-height: 30px; cursor: pointer; padding: 0 8px; font-size: 14px; }
     .page-btn.active { background: var(--text-strong); color: #fff; border-color: #11161d; }
 
     /* Aside */
@@ -64,15 +64,15 @@
     .page-list-popup.show { display: flex; }
     .page-list-content { background: #fff; border-radius: 8px; padding: 20px; max-width: 400px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     .page-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .page-list-title { font-size: 18px; font-weight: 700; color: var(--text-strong); }
-    .page-list-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray-400); padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
-    .page-list-close:hover { color: var(--text-strong); }
+    .page-list-title { font-size: 18px; font-weight: 700; color: #1b2430; }
+    .page-list-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #b6bec8; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+    .page-list-close:hover { color: #1b2430; }
     .page-list-items { display: grid; gap: 8px; }
-    .page-list-item { padding: 12px 16px; border: 1px solid var(--gray-300); border-radius: 6px; cursor: pointer; transition: all 0.2s; background: #fff; }
-    .page-list-item:hover { background: var(--gray-50); border-color: var(--primary); }
-    .page-list-item.current { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .page-list-item { padding: 12px 16px; border: 1px solid #cfd6dd; border-radius: 6px; cursor: pointer; transition: all 0.2s; background: #fff; }
+    .page-list-item:hover { background: #f7f7f8; border-color: #2a7de1; }
+    .page-list-item.current { background: #2a7de1; color: #fff; border-color: #2a7de1; }
     .page-list-item-name { font-weight: 600; margin-bottom: 4px; }
-    .page-list-item-desc { font-size: 12px; color: var(--gray-400); }
+    .page-list-item-desc { font-size: 12px; color: #b6bec8; }
     .page-list-item.current .page-list-item-desc { color: rgba(255,255,255,0.8); }
 
     @media (max-width:1200px){ .layout{ grid-template-columns:1fr; } }
@@ -87,9 +87,7 @@
       function makeDraggable(el,pos,i){ var sx=0,sy=0,ox=0,oy=0,mv=false; function down(e){ mv=true; el.style.cursor='grabbing'; sx=(e.touches?e.touches[0].clientX:e.clientX); sy=(e.touches?e.touches[0].clientY:e.clientY); ox=parseFloat(el.style.left)||0; oy=parseFloat(el.style.top)||0; document.addEventListener('mousemove', move); document.addEventListener('mouseup', up); document.addEventListener('touchmove', move,{passive:false}); document.addEventListener('touchend', up);} function move(e){ if(!mv) return; if(e.touches) e.preventDefault(); var cx=(e.touches?e.touches[0].clientX:e.clientX), cy=(e.touches?e.touches[0].clientY:e.clientY); var nx=ox+(cx-sx), ny=oy+(cy-sy); var maxX=window.innerWidth-el.offsetWidth-2, maxY=window.innerHeight-el.offsetHeight-2; nx=Math.max(2,Math.min(maxX,nx)); ny=Math.max(2,Math.min(maxY,ny)); el.style.left=nx+'px'; el.style.top=ny+'px'; } function up(){ if(!mv) return; mv=false; el.style.cursor='grab'; pos[i]={x:parseFloat(el.style.left)||0,y:parseFloat(el.style.top)||0}; savePositions(pos); document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); document.removeEventListener('touchmove', move); document.removeEventListener('touchend', up);} el.addEventListener('mousedown', down); el.addEventListener('touchstart', down, {passive:true}); }
       function renderBadges(){ var c=getBadgeCount(), p=loadPositions(c), layer=q('.badge-layer')||document.body.appendChild(Object.assign(document.createElement('div'),{className:'badge-layer'})); layer.innerHTML=''; for(var i=0;i<c;i++){ var b=document.createElement('div'); b.className='badge draggable'; b.textContent=(i+1); b.style.left=(p[i].x||16)+'px'; b.style.top=(p[i].y||16)+'px'; layer.appendChild(b); makeDraggable(b,p,i);} }
       // 페이지 목록 데이터
-      var pageList = [
-        { name: '메인 메뉴', file: '../index.html', desc: 'Media관리 시스템 메인 메뉴' },
-        { name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
+      var pageList = [{ name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
         { name: 'Media관리 > News > 등록', file: 'Media관리_News_등록.html', desc: '뉴스 게시글 등록' },
         { name: 'Media관리 > News > 수정/상세', file: 'Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정/상세' },
         { name: 'Media관리 > Social > 목록', file: 'Media관리_Social_목록.html', desc: '소셜 포스트 목록 관리' },
@@ -138,7 +136,7 @@
         pageListPopup.classList.remove('show');
       }
       
-      window.addEventListener('DOMContentLoaded', function(){ 
+      document.addEventListener('DOMContentLoaded', function(){ 
         var metaPath=q('#meta-path'); if(metaPath){ metaPath.textContent='Media관리 > Social > 목록'; } 
         renderBadges(); 
         
@@ -186,6 +184,7 @@
         <a class="button" href="Media관리_News_수정_상세.html">이전</a>
         <a class="button" href="Media관리_Social_등록.html">다음</a>
         <button class="button" id="page-list-btn" type="button">페이지 목록</button>
+        <a class="button" href="../index.html">메인으로</a>
       </div>
     </div>
 

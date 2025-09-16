@@ -44,23 +44,21 @@
     .page-list-popup.show { display: flex; }
     .page-list-content { background: #fff; border-radius: 8px; padding: 20px; max-width: 400px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
     .page-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .page-list-title { font-size: 18px; font-weight: 700; color: var(--text-strong); }
-    .page-list-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray-400); padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
-    .page-list-close:hover { color: var(--text-strong); }
+    .page-list-title { font-size: 18px; font-weight: 700; color: #1b2430; }
+    .page-list-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #b6bec8; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+    .page-list-close:hover { color: #1b2430; }
     .page-list-items { display: grid; gap: 8px; }
-    .page-list-item { padding: 12px 16px; border: 1px solid var(--gray-300); border-radius: 6px; cursor: pointer; transition: all 0.2s; background: #fff; }
-    .page-list-item:hover { background: var(--gray-50); border-color: var(--primary); }
-    .page-list-item.current { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .page-list-item { padding: 12px 16px; border: 1px solid #cfd6dd; border-radius: 6px; cursor: pointer; transition: all 0.2s; background: #fff; }
+    .page-list-item:hover { background: #f7f7f8; border-color: #2a7de1; }
+    .page-list-item.current { background: #2a7de1; color: #fff; border-color: #2a7de1; }
     .page-list-item-name { font-weight: 600; margin-bottom: 4px; }
-    .page-list-item-desc { font-size: 12px; color: var(--gray-400); }
+    .page-list-item-desc { font-size: 12px; color: #b6bec8; }
     .page-list-item.current .page-list-item-desc { color: rgba(255,255,255,0.8); }
   </style>
   <script>
     (function(){
       // 페이지 목록 데이터
-      var pageList = [
-        { name: '메인 메뉴', file: '../index.html', desc: 'Media관리 시스템 메인 메뉴' },
-        { name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
+      var pageList = [{ name: 'Media관리 > News > 목록', file: 'Media관리_News_목록.html', desc: '뉴스 게시글 목록 관리' },
         { name: 'Media관리 > News > 등록', file: 'Media관리_News_등록.html', desc: '뉴스 게시글 등록' },
         { name: 'Media관리 > News > 수정/상세', file: 'Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정/상세' },
         { name: 'Media관리 > Social > 목록', file: 'Media관리_Social_목록.html', desc: '소셜 포스트 목록 관리' },
@@ -109,7 +107,7 @@
         pageListPopup.classList.remove('show');
       }
       
-      window.addEventListener('DOMContentLoaded', function(){ 
+      document.addEventListener('DOMContentLoaded', function(){ 
         // Page List 이벤트 리스너
         var pageListBtn = document.getElementById('page-list-btn');
         var pageListClose = document.getElementById('page-list-close');
@@ -147,7 +145,7 @@
       <div class="meta-chip small">page</div>
       <div class="meta-value small" id="meta-page-post">6</div>
     </div>
-    <div class="section-title" id="section-title-post"><div>Media관리 &gt; Social &gt; 수정/상세</div><div class="nav"><a class="button" href="Media관리_Social_등록.html">이전</a><a class="button" href="#" aria-disabled="true">다음</a><button class="button" id="page-list-btn" type="button">페이지 목록</button></div></div>
+    <div class="section-title" id="section-title-post"><div>Media관리 &gt; Social &gt; 수정/상세</div><div class="nav"><a class="button" href="Media관리_Social_등록.html">이전</a><a class="button" href="#" aria-disabled="true">다음</a><button class="button" id="page-list-btn" type="button">페이지 목록</button><a class="button" href="../index.html">메인으로</a></div></div>
     <div class="layout" id="layout-post">
       <div class="card" id="post-card">
         <div class="form" id="post-form">

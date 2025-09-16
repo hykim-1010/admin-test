@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>로그인 2차 - 관리자 화면설계</title>
+  <title>초기 비밀번호 설정 - 관리자 화면설계</title>
   <style>
     :root {
       --gray-50: #f7f7f8; --gray-100: #eef0f3; --gray-200: #e1e4e8; --gray-300: #cfd6dd; --gray-400: #b6bec8;
@@ -40,6 +40,11 @@
     .textarea { height: 120px; padding: 10px; resize: vertical; }
     .button.primary { background: var(--text-strong); color: #fff; border-color: #191f28; cursor: pointer; font-size: 14px; height: 34px; padding: 0 14px; }
 
+    /* Password Policy */
+    .password-policy { background: #f8fafc; border: 1px solid var(--gray-200); border-radius: 6px; padding: 10px; margin-top: 8px; font-size: 12px; color: var(--gray-600); }
+    .password-policy ul { margin: 8px 0 0 0; padding-left: 16px; }
+    .password-policy li { margin-bottom: 4px; }
+
     /* Aside */
     .aside .title { font-weight: 800; margin-bottom: 8px; }
     .desc-list { border-top: 2px solid var(--gray-400); }
@@ -69,43 +74,59 @@
   <div class="container" id="tpl-container">
     <!-- Meta Information -->
     <div class="meta card" id="meta-card">
-      <div class="meta-title" id="meta-title">로그인 2차</div>
+      <div class="meta-title" id="meta-title">초기 비밀번호 설정</div>
       <div class="meta-chip">Path</div>
-      <div class="meta-value" id="meta-path">관리자 > 로그인 > 2차</div>
+      <div class="meta-value" id="meta-path">관리자 > 초기 비밀번호 설정</div>
       <div class="meta-chip">Writer</div>
       <div class="meta-value" id="meta-writer">시스템 관리자</div>
       <div class="meta-chip">Date / Version</div>
       <div class="meta-value small" id="meta-date">2024-09-16</div>
       <div class="meta-chip small">page</div>
-      <div class="meta-value small" id="meta-page">2</div>
+      <div class="meta-value small" id="meta-page">4</div>
     </div>
 
     <!-- Section Title -->
     <div class="section-title" id="section-title">
-      <div>로그인 2차</div>
+      <div>초기 비밀번호 설정</div>
       <div class="nav" id="nav">
-        <a class="button" href="로그인_1차.html">이전</a>
-        <a class="button" href="로그인_3차.html">다음</a>
+        <a class="button" href="로그인_3차.html">이전</a>
+        <a class="button" href="#" aria-disabled="true">다음</a>
         <button class="button" id="page-list-btn" type="button">페이지 목록</button>
-        <a class="button" href="index.html">메인으로</a>
       </div>
     </div>
 
     <!-- Layout -->
     <div class="layout" id="layout">
       <div class="card" id="main-card">
-        <form class="form" id="auth-form">
-          <div class="row" id="row-email">
-            <div class="label" id="label-email">이메일</div>
-            <div><input class="input" id="input-email" value="admin@company.com" readonly style="background: #f8fafc;" /></div>
+        <form class="form" id="password-form">
+          <div class="row" id="row-current">
+            <div class="label" id="label-current">기존 비밀번호 <span class="req">*</span></div>
+            <div><input class="input" id="input-current" type="password" placeholder="현재 비밀번호를 입력하세요" /></div>
           </div>
-          <div class="row" id="row-message">
-            <div class="label" id="label-message">안내</div>
-            <div><textarea class="textarea" id="textarea-message" readonly style="background: #f8fafc;">이메일로 발송된 인증 링크를 확인하세요.</textarea></div>
+          <div class="row" id="row-new">
+            <div class="label" id="label-new">신규 비밀번호 <span class="req">*</span></div>
+            <div>
+              <input class="input" id="input-new" type="password" placeholder="새 비밀번호를 입력하세요" />
+              <div class="password-policy">
+                <strong>비밀번호 정책:</strong>
+                <ul>
+                  <li>최소 8자리 이상, 영어대문자/소문자/숫자/특수문자 중 3종류 조합</li>
+                  <li>특수문자 최소 1자리 이상 포함 필요</li>
+                  <li>기존 비밀번호와 동일 설정 불가</li>
+                  <li>아이디 포함 불가</li>
+                  <li>동일한 문자 또는 숫자 3자 이상 반복 사용 불가</li>
+                  <li>주기성 문자(abcd, 1234 등) 및 키보드상의 연속된 배열(asdf, qwert 등) 구성 불가</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="row-confirm">
+            <div class="label" id="label-confirm">신규 비밀번호 확인 <span class="req">*</span></div>
+            <div><input class="input" id="input-confirm" type="password" placeholder="새 비밀번호를 다시 입력하세요" /></div>
           </div>
           <div class="row" id="row-button">
             <div class="label" id="label-button"></div>
-            <div><button class="button primary" id="btn-auth" type="button">인증하기</button></div>
+            <div><button class="button primary" id="btn-change" type="button">비밀번호 변경</button></div>
           </div>
         </form>
       </div>
@@ -113,17 +134,30 @@
         <div class="title" id="desc-title">Description</div>
         <div class="desc-list" id="desc-list">
           <div class="desc-item">
-            <div class="head">기본 기능</div>
+            <div class="head">입력 항목</div>
             <ul>
-              <li>이메일 텍스트 표시</li>
-              <li>인증하기 버튼 클릭 시 3차 인증으로 이동</li>
+              <li>기존 비밀번호</li>
+              <li>신규 비밀번호</li>
+              <li>신규 비밀번호 확인</li>
+            </ul>
+          </div>
+          <div class="desc-item">
+            <div class="head">비밀번호 정책</div>
+            <ul>
+              <li>최소 8자리 이상</li>
+              <li>3종류 이상 문자 조합</li>
+              <li>특수문자 1자리 이상</li>
+              <li>기존 비밀번호와 다름</li>
+              <li>아이디 미포함</li>
+              <li>반복/연속 문자 금지</li>
             </ul>
           </div>
           <div class="desc-item">
             <div class="head">처리 과정</div>
             <ul>
-              <li>등록된 이메일로 인증 메일 발송</li>
-              <li>이메일 인증을 통한 2차 보안</li>
+              <li>관리자 추가 시 임시 비밀번호 발송</li>
+              <li>최초 로그인 시 비밀번호 변경 필수</li>
+              <li>정책 준수 여부 검증</li>
             </ul>
           </div>
         </div>
@@ -156,10 +190,11 @@
       { name: 'Media관리 > News > 수정/상세', file: 'Media관리/Media관리_News_수정_상세.html', desc: '뉴스 게시글 수정 및 상세 정보 조회' },
       { name: 'Media관리 > Social > 목록', file: 'Media관리/Media관리_Social_목록.html', desc: '소셜 포스트 목록 관리' },
       { name: 'Media관리 > Social > 등록', file: 'Media관리/Media관리_Social_등록.html', desc: '소셜 포스트 등록' },
-      { name: 'Media관리 > Social > 수정/상세', file: 'Media관리/Media관리_Social_수정_상세.html', desc: '소셜 포스트 수정 및 상세 정보 조회' }
+      { name: 'Media관리 > Social > 수정/상세', file: 'Media관리/Media관리_Social_수정_상세.html', desc: '소셜 포스트 수정 및 상세 정보 조회' },
+      { name: '메인 페이지', file: 'index.html', desc: '전체 페이지 목록' }
     ];
 
-    var currentPage = '로그인_2차.html';
+    var currentPage = '초기비밀번호설정.html';
 
     function showPageList() {
       var pageListItems = document.getElementById('page-list-items');

@@ -17,15 +17,15 @@
   .page-list-popup.show { display: flex; }
   .page-list-content { background: #fff; border-radius: 8px; padding: 20px; max-width: 400px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
   .page-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-  .page-list-title { font-size: 18px; font-weight: 700; color: var(--text-strong); }
-  .page-list-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray-400); padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
-  .page-list-close:hover { color: var(--text-strong); }
+  .page-list-title { font-size: 18px; font-weight: 700; color: #1b2430; }
+  .page-list-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #b6bec8; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+  .page-list-close:hover { color: #1b2430; }
   .page-list-items { display: grid; gap: 8px; }
-  .page-list-item { padding: 12px 16px; border: 1px solid var(--gray-300); border-radius: 6px; cursor: pointer; transition: all 0.2s; background: #fff; }
-  .page-list-item:hover { background: var(--gray-50); border-color: var(--primary); }
-  .page-list-item.current { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .page-list-item { padding: 12px 16px; border: 1px solid #cfd6dd; border-radius: 6px; cursor: pointer; transition: all 0.2s; background: #fff; }
+  .page-list-item:hover { background: #f7f7f8; border-color: #2a7de1; }
+  .page-list-item.current { background: #2a7de1; color: #fff; border-color: #2a7de1; }
   .page-list-item-name { font-weight: 600; margin-bottom: 4px; }
-  .page-list-item-desc { font-size: 12px; color: var(--gray-400); }
+  .page-list-item-desc { font-size: 12px; color: #b6bec8; }
   .page-list-item.current .page-list-item-desc { color: rgba(255,255,255,0.8); }
 </style>
 
@@ -48,56 +48,64 @@
   // 공통 페이지 목록 기능
   window.PageListManager = {
     init: function(currentPage) {
-      var pageListPopup = document.getElementById('page-list-popup');
-      var pageListClose = document.getElementById('page-list-close');
-      var pageListItems = document.getElementById('page-list-items');
-      
-      if (!pageListPopup || !pageListClose || !pageListItems) {
-        console.warn('Page list elements not found');
-        return;
-      }
-      
-      function showPageList() {
-        pageListItems.innerHTML = '';
+      // DOM이 완전히 로드된 후 실행
+      setTimeout(function() {
+        var pageListPopup = document.getElementById('page-list-popup');
+        var pageListClose = document.getElementById('page-list-close');
+        var pageListItems = document.getElementById('page-list-items');
         
-        window.PageListData.forEach(function(page) {
-          var item = document.createElement('div');
-          item.className = 'page-list-item';
-          if (page.file === currentPage) {
-            item.classList.add('current');
-          }
+        if (!pageListPopup || !pageListClose || !pageListItems) {
+          console.warn('Page list elements not found');
+          return;
+        }
+        
+        function showPageList() {
+          pageListItems.innerHTML = '';
           
-          item.innerHTML = '<div class="page-list-item-name">' + page.name + '</div><div class="page-list-item-desc">' + page.desc + '</div>';
-          
-          item.addEventListener('click', function() {
-            if (page.file !== currentPage) {
-              window.location.href = page.file;
+          window.PageListData.forEach(function(page) {
+            var item = document.createElement('div');
+            item.className = 'page-list-item';
+            if (page.file === currentPage) {
+              item.classList.add('current');
             }
+            
+            item.innerHTML = '<div class="page-list-item-name">' + page.name + '</div><div class="page-list-item-desc">' + page.desc + '</div>';
+            
+            item.addEventListener('click', function() {
+              if (page.file !== currentPage) {
+                window.location.href = page.file;
+              }
+            });
+            
+            pageListItems.appendChild(item);
           });
           
-          pageListItems.appendChild(item);
+          pageListPopup.classList.add('show');
+        }
+        
+        function hidePageList() {
+          pageListPopup.classList.remove('show');
+        }
+        
+        // 기존 이벤트 리스너 제거 후 새로 등록
+        var pageListBtns = document.querySelectorAll('[id^="page-list-btn"]');
+        pageListBtns.forEach(function(btn) {
+          // 기존 이벤트 리스너 제거
+          btn.removeEventListener('click', showPageList);
+          // 새 이벤트 리스너 등록
+          btn.addEventListener('click', showPageList);
         });
         
-        pageListPopup.classList.add('show');
-      }
-      
-      function hidePageList() {
-        pageListPopup.classList.remove('show');
-      }
-      
-      // 이벤트 리스너
-      var pageListBtns = document.querySelectorAll('[id^="page-list-btn"]');
-      pageListBtns.forEach(function(btn) {
-        btn.addEventListener('click', showPageList);
-      });
-      
-      pageListClose.addEventListener('click', hidePageList);
-      
-      pageListPopup.addEventListener('click', function(e) {
-        if (e.target === pageListPopup) {
-          hidePageList();
-        }
-      });
+        pageListClose.addEventListener('click', hidePageList);
+        
+        pageListPopup.addEventListener('click', function(e) {
+          if (e.target === pageListPopup) {
+            hidePageList();
+          }
+        });
+        
+        console.log('Page list manager initialized for:', currentPage);
+      }, 100);
     }
   };
 </script>
