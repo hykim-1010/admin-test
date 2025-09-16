@@ -186,93 +186,6 @@
         return labels.map(function(label){ var n=normalize(label); return normMap[n] || FORM_KEY_BY_LABEL[label] || label; });
       }
 
-      // ========== CSV 자동 매핑 & 라벨 매핑 파일 지원 ==========
-      function parseCsvLine(line){
-        var out=[], cur='', q=false; for(var i=0;i<line.length;i++){ var ch=line[i]; if(ch==='"'){ if(q && line[i+1]==='"'){ cur+='"'; i++; } else { q=!q; } } else if(ch===',' && !q){ out.push(cur); cur=''; } else { cur+=ch; } } out.push(cur); return out;
-      }
-      function parseCsv(text){
-        var lines=text.replace(/^\uFEFF/, '').split(/\r?\n/).filter(Boolean); if(!lines.length) return [];
-        var header=parseCsvLine(lines[0]); var rows=[]; for(var i=1;i<lines.length;i++){ var cols=parseCsvLine(lines[i]); if(cols.every(function(c){return !c;})) continue; rows.push({ header:header, cols:cols }); }
-        return rows;
-      }
-      function extractListLabelsFromFunction(funcText){
-        if(!funcText) return [];
-        var lines=String(funcText).split(/\r?\n/);
-        for(var i=0;i<lines.length;i++){
-          var s=lines[i].trim();
-          if(/^[-–]\s*리스트\s*:/.test(s) || /^리스트\s*:/.test(s)){
-            var after=s.split(':').slice(1).join(':');
-            return after.split(',').map(function(x){ return x.trim(); }).filter(Boolean);
-          }
-        }
-        return [];
-      }
-      function extractFormLabelsFromFunction(funcText){
-        if(!funcText) return [];
-        var lines=String(funcText).split(/\r?\n/);
-        for(var i=0;i<lines.length;i++){
-          var s=lines[i].trim();
-          if(/^[-–]?\s*(등록\s*화면|등록)\s*:/.test(s)){
-            var after=s.split(':').slice(1).join(':');
-            return after.split(',').map(function(x){ return x.trim(); }).filter(Boolean);
-          }
-        }
-        return [];
-      }
-      function loadText(url){ return fetch(url).then(function(r){ if(!r.ok) throw new Error('fail '+url); return r.text(); }); }
-      function loadJson(url){ return fetch(url).then(function(r){ if(!r.ok) throw new Error('fail '+url); return r.json(); }); }
-      function autoApplyFromCsvAndMapping(opts){
-        opts=opts||{}; var csvPath=opts.csvPath||'sheet1.csv'; var mapPath=opts.mapPath||'label-mapping.txt'; var wantMenu1=opts.menu1; var wantMenu2=opts.menu2;
-        // 1) load mapping and rebuild KEY_BY_LABEL (list)
-        return loadJson(mapPath).then(function(mapping){
-          var listMap = mapping.list || mapping; LABELS_BY_KEY=listMap; KEY_BY_LABEL=buildKeyByLabel(LABELS_BY_KEY);
-        })
-        .catch(function(){ /* keep defaults */ })
-        .then(function(){ return loadText(csvPath); })
-        .then(function(csv){ var rows=parseCsv(csv); if(!rows.length) throw new Error('CSV empty');
-          // find first 목록 row (optionally filter by 메뉴1/메뉴2)
-          var chosen=null; for(var i=0;i<rows.length;i++){ var header=rows[i].header, cols=rows[i].cols; var idx1=header.indexOf('메뉴1'); var idx2=header.indexOf('메뉴2'); var idx3=header.indexOf('메뉴3'); var idxF=header.indexOf('기능'); if(idx1<0||idx2<0||idx3<0||idxF<0){ idx1=0; idx2=1; idx3=2; idxF=3; }
-            var m1=cols[idx1]||''; var m2=cols[idx2]||''; var m3=cols[idx3]||''; if(wantMenu1 && m1!==wantMenu1) continue; if(wantMenu2 && m2!==wantMenu2) continue; if(m3.indexOf('목록')>-1){ chosen=cols; break; } }
-          if(!chosen) throw new Error('목록 항목을 찾지 못했습니다.');
-          var header=rows[0].header; var idxF=header.indexOf('기능'); if(idxF<0) idxF=3; var func=chosen[idxF]||''; var labels=extractListLabelsFromFunction(func);
-          var keys=labelsToKeys(labels);
-          applyListColumnConfig(keys);
-        }).catch(function(err){ console.warn('자동 매핑 실패:', err); });
-      }
-
-      function applyFormConfig(formKeys){
-        if(!Array.isArray(formKeys) || !formKeys.length) return;
-        var map = {
-          lang:'post-row-lang', type:'post-row-type', title:'post-row-title', content:'post-row-content',
-          image:'post-row-image', linkUrl:'post-row-link',
-          dateRange:'post-row-daterange', visible:'post-row-visible', attachment:'post-row-attachment'
-        };
-        // Hide all first
-        Object.keys(map).forEach(function(k){ var el=document.getElementById(map[k]); if(el){ el.style.display='none'; } });
-        // Reorder and show as given order
-        var form = document.getElementById('post-form');
-        formKeys.forEach(function(k){ var id=map[k]; var el=id && document.getElementById(id); if(el){ el.style.display='grid'; form.appendChild(el); } });
-      }
-
-      function autoApplyFormFromCsvAndMapping(opts){
-        opts=opts||{}; var csvPath=opts.csvPath||'sheet1.csv'; var mapPath=opts.mapPath||'label-mapping.txt'; var wantMenu1=opts.menu1; var wantMenu2=opts.menu2;
-        return loadJson(mapPath).then(function(mapping){
-          if(mapping.form){ FORM_LABELS_BY_KEY=mapping.form; FORM_KEY_BY_LABEL=buildKeyByLabel(FORM_LABELS_BY_KEY); }
-        }).catch(function(){ /* keep defaults */ })
-        .then(function(){ return loadText(csvPath); })
-        .then(function(csv){ var rows=parseCsv(csv); if(!rows.length) throw new Error('CSV empty');
-          // find first 등록 row (optionally filter), fallback to 수정/상세
-          var chosen=null; for(var i=0;i<rows.length;i++){ var header=rows[i].header, cols=rows[i].cols; var idx1=header.indexOf('메뉴1'); var idx2=header.indexOf('메뉴2'); var idx3=header.indexOf('메뉴3'); var idxF=header.indexOf('기능'); if(idx1<0||idx2<0||idx3<0||idxF<0){ idx1=0; idx2=1; idx3=2; idxF=3; }
-            var m1=cols[idx1]||''; var m2=cols[idx2]||''; var m3=cols[idx3]||''; if(wantMenu1 && m1!==wantMenu1) continue; if(wantMenu2 && m2!==wantMenu2) continue; if(m3.indexOf('등록')>-1){ chosen=cols; break; } }
-          if(!chosen){ for(var j=0;j<rows.length && !chosen;j++){ var h=rows[j].header, c=rows[j].cols; var i1=h.indexOf('메뉴1'); var i2=h.indexOf('메뉴2'); var i3=h.indexOf('메뉴3'); var iF=h.indexOf('기능'); if(i1<0||i2<0||i3<0||iF<0){ i1=0;i2=1;i3=2;iF=3; }
-            var mm1=c[i1]||'', mm2=c[i2]||'', mm3=c[i3]||''; if(wantMenu1 && mm1!==wantMenu1) continue; if(wantMenu2 && mm2!==wantMenu2) continue; if(/수정|상세/.test(mm3)){ chosen=c; break; } }
-          }
-          if(!chosen) throw new Error('등록/상세 항목을 찾지 못했습니다.');
-          var header=rows[0].header; var idxF=header.indexOf('기능'); if(idxF<0) idxF=3; var func=chosen[idxF]||''; var labels=extractFormLabelsFromFunction(func);
-          var keys=labelsToFormKeys(labels);
-          applyFormConfig(keys);
-        }).catch(function(err){ console.warn('등록 자동 매핑 실패:', err); });
-      }
 
       // Badges
       function getBadgeCountFromDescription(){ return document.querySelectorAll('#desc-list .desc-item .head').length || 0; }
@@ -395,39 +308,8 @@
           labelsToKeys: labelsToKeys,
           labelsToFormKeys: labelsToFormKeys,
           LABEL_BY_KEY: LABEL_BY_KEY,
-          KEY_BY_LABEL: KEY_BY_LABEL,
-          autoApplyFromCsvAndMapping: autoApplyFromCsvAndMapping,
-          autoApplyFormFromCsvAndMapping: autoApplyFormFromCsvAndMapping,
-          applyFormConfig: applyFormConfig
+          KEY_BY_LABEL: KEY_BY_LABEL
         };
-
-        // Auto map button
-        var autoBtn = document.getElementById('btn-auto-map');
-        if(autoBtn){
-          autoBtn.addEventListener('click', function(){
-            try{
-              var m1=document.getElementById('auto-menu1'); m1=m1?m1.value:'';
-              var m2=document.getElementById('auto-menu2'); m2=m2?m2.value:'';
-              var st=document.getElementById('auto-map-status'); if(st){ st.textContent='매핑 중…'; }
-              window.AdminTemplateV11.autoApplyFromCsvAndMapping({ csvPath:'sheet1.csv', mapPath:'label-mapping.txt', menu1:m1, menu2:m2 })
-                .then(function(){ if(st){ st.textContent='완료'; setTimeout(function(){ st.textContent=''; }, 1500); } })
-                .catch(function(e){ if(st){ st.textContent='오류: '+e; } });
-            }catch(e){ var st=document.getElementById('auto-map-status'); if(st){ st.textContent='오류: '+e; } }
-          });
-        }
-        var autoFormBtn = document.getElementById('btn-auto-map-form');
-        if(autoFormBtn){
-          autoFormBtn.addEventListener('click', function(){
-            try{
-              var m1=document.getElementById('auto-menu1-post'); m1=m1?m1.value:'';
-              var m2=document.getElementById('auto-menu2-post'); m2=m2?m2.value:'';
-              var st=document.getElementById('auto-map-status-post'); if(st){ st.textContent='매핑 중…'; }
-              window.AdminTemplateV11.autoApplyFormFromCsvAndMapping({ csvPath:'sheet1.csv', mapPath:'label-mapping.txt', menu1:m1, menu2:m2 })
-                .then(function(){ if(st){ st.textContent='완료'; setTimeout(function(){ st.textContent=''; }, 1500); } })
-                .catch(function(e){ if(st){ st.textContent='오류: '+e; } });
-            }catch(e){ var st=document.getElementById('auto-map-status-post'); if(st){ st.textContent='오류: '+e; } }
-          });
-        }
       });
     })();
   </script>
@@ -461,12 +343,6 @@
 
       <div class="layout" id="layout-list">
         <div class="card" id="list-card">
-          <div class="nav" id="auto-map-tools" style="margin-bottom:8px">
-            <input class="input" id="auto-menu1" placeholder="메뉴1 (예: Media관리)" value="Media관리" />
-            <input class="input" id="auto-menu2" placeholder="메뉴2 (예: News)" value="News" />
-            <button class="button" id="btn-auto-map" type="button">CSV 자동 매핑</button>
-            <span id="auto-map-status" style="color:#8e99a8"></span>
-          </div>
           <div class="filters" id="filters">
             <div class="date-controls" id="filter-date">
               <input type="date" class="input" id="filter-start-date" aria-label="시작일" />
@@ -536,12 +412,6 @@
 
       <div class="layout" id="layout-post">
         <div class="card" id="post-card">
-          <div class="nav" id="auto-map-tools-post" style="margin-bottom:8px">
-            <input class="input" id="auto-menu1-post" placeholder="메뉴1 (예: Media관리)" value="Media관리" />
-            <input class="input" id="auto-menu2-post" placeholder="메뉴2 (예: News)" value="News" />
-            <button class="button" id="btn-auto-map-form" type="button">CSV 자동 매핑(등록)</button>
-            <span id="auto-map-status-post" style="color:#8e99a8"></span>
-          </div>
           <form class="form" id="post-form" onsubmit="return false;" aria-label="등록 폼 템플릿">
             <div class="row" id="post-row-lang">
               <div class="label" id="post-label-lang">언어</div>

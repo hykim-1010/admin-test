@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그인 3차 - 관리자 화면설계</title>
+  <style>
+    :root {
+      --gray-50: #f7f7f8; --gray-100: #eef0f3; --gray-200: #e1e4e8; --gray-300: #cfd6dd; --gray-400: #b6bec8;
+      --text-strong: #1b2430; --text: #2f3a4a; --primary: #2a7de1; --primary-dark: #1d5fb0; --danger:#e53935;
+    }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif; color: var(--text); line-height: 1.45; font-size: 15px; }
+    .container { padding: 12px 16px 20px; position: relative; }
+
+    /* Meta */
+    .meta { display: grid; grid-template-columns: 240px 64px 1fr 70px 200px 110px 70px 52px 40px; gap: 6px; align-items: stretch; border: 1px solid var(--gray-300); background: var(--gray-50); padding: 6px; border-radius: 6px; width: 100%; box-sizing: border-box; }
+    .meta-title { background: #fff; border: 1px solid var(--gray-300); padding: 6px 8px; font-weight: 700; display: flex; align-items: center; }
+    .meta-chip { background: #6f7785; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 10px; border-radius: 2px; }
+    .meta-value { background: #fff; border: 1px solid var(--gray-300); padding: 6px 8px; display: flex; align-items: center; }
+    .meta-chip.small { padding: 0 6px; }
+    .meta-value.small { justify-content: center; }
+
+    /* Title & Tabs */
+    .section-title { display:flex; align-items:center; justify-content:space-between; margin: 16px 0 12px; font-size: 20px; font-weight: 800; }
+    .nav { display:flex; gap:6px; }
+    .button { height: 32px; border: 1px solid var(--gray-300); border-radius: 6px; background: #fff; padding: 0 10px; cursor: pointer; font-size: 14px; }
+
+    /* Layout */
+    .layout { display: grid; grid-template-columns: 1fr 300px; gap: 16px; align-items: start; }
+    .card { border: 1px solid var(--gray-300); border-radius: 6px; background: #fff; padding: 12px; width: 100%; max-width: 100%; overflow: hidden; box-sizing: border-box; }
+
+    /* Form */
+    .form { display: grid; gap: 12px; max-width: 100%; }
+    .row { display: grid; grid-template-columns: 160px 1fr; gap: 12px; align-items: center; border-bottom: 1px solid var(--gray-200); padding-bottom: 10px; }
+    .row:last-of-type { border-bottom: 0; }
+    .row .label { font-weight: 700; color: #3a4556; display: flex; gap: 8px; align-items: center; }
+    .row .req { color: #e53935; font-weight: 900; }
+    .input, .select, .textarea { height: 32px; border: 1px solid var(--gray-300); border-radius: 6px; background: #fff; padding: 0 10px; font-size: 14px; max-width: 100%; box-sizing: border-box; }
+    .textarea { height: 120px; padding: 10px; resize: vertical; }
+    .button.primary { background: var(--text-strong); color: #fff; border-color: #191f28; cursor: pointer; font-size: 14px; height: 34px; padding: 0 14px; }
+
+    /* Aside */
+    .aside .title { font-weight: 800; margin-bottom: 8px; }
+    .desc-list { border-top: 2px solid var(--gray-400); }
+    .desc-item { border-bottom: 1px solid var(--gray-300); padding: 10px 8px; }
+    .desc-item .head { font-weight: 700; margin-bottom: 6px; }
+
+
+    @media (max-width: 1200px) { .layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container" id="tpl-container">
+    <!-- Meta Information -->
+    <div class="meta card" id="meta-card">
+      <div class="meta-title" id="meta-title">로그인 3차</div>
+      <div class="meta-chip">Path</div>
+      <div class="meta-value" id="meta-path">관리자 > 로그인 > 3차</div>
+      <div class="meta-chip">Writer</div>
+      <div class="meta-value" id="meta-writer">시스템 관리자</div>
+      <div class="meta-chip">Date / Version</div>
+      <div class="meta-value small" id="meta-date">2024-09-16</div>
+      <div class="meta-chip small">page</div>
+      <div class="meta-value small" id="meta-page">3</div>
+    </div>
+
+    <!-- Section Title -->
+    <div class="section-title" id="section-title">
+      <div>로그인 3차</div>
+      <div class="nav" id="nav">
+        <a class="button" href="로그인_2차.html">이전</a>
+        <a class="button" href="초기비밀번호설정.html">다음</a>
+        <button class="button" id="page-list-btn" type="button">페이지 목록</button>
+      </div>
+    </div>
+
+    <!-- Layout -->
+    <div class="layout" id="layout">
+      <div class="card" id="main-card">
+        <form class="form" id="auth-form">
+          <div class="row" id="row-code">
+            <div class="label" id="label-code">인증번호 <span class="req">*</span></div>
+            <div><input class="input" id="input-code" placeholder="6자리 인증번호를 입력하세요" maxlength="6" /></div>
+          </div>
+          <div class="row" id="row-button">
+            <div class="label" id="label-button"></div>
+            <div><button class="button primary" id="btn-confirm" type="button">확인</button></div>
+          </div>
+          <div class="row" id="row-resend">
+            <div class="label" id="label-resend"></div>
+            <div><button class="button" id="btn-resend" type="button">인증번호 재발송</button></div>
+          </div>
+        </form>
+      </div>
+      <aside class="aside card" id="desc-aside">
+        <div class="title" id="desc-title">Description</div>
+        <div class="desc-list" id="desc-list">
+          <div class="desc-item">
+            <div class="head">기본 기능</div>
+            <ul>
+              <li>2차 페이지에서 하단에 인증번호 입력창 추가</li>
+              <li>확인 버튼으로 최종 인증</li>
+            </ul>
+          </div>
+          <div class="desc-item">
+            <div class="head">추가 기능</div>
+            <ul>
+              <li>인증번호 재발송 기능</li>
+              <li>6자리 숫자 입력 제한</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Common Page List Popup -->
+  <div id="common-page-list-container"></div>
+
+  <script>
+    // 공통 페이지 목록 로드
+    fetch('common-page-list.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('common-page-list-container').innerHTML = html;
+        // 페이지 목록 초기화
+        if (window.PageListManager) {
+          window.PageListManager.init('로그인_3차.html');
+        }
+      })
+      .catch(error => {
+        console.error('Failed to load common page list:', error);
+      });
+  </script>
+</body>
+</html>
